@@ -12,14 +12,13 @@ public class CounterService : ICounterService {
 
     public int Increment(string client = "Anonymous")
     {
-        if(!_counter.ContainsKey(client))
-        {
-            _counter.Add(client, 1);
-            return 1;
-        }
-
         lock (_locker)
         {
+            if(!_counter.ContainsKey(client))
+            {
+                _counter.Add(client, 1);
+                return 1;
+            }
             _counter[client]++;
             Thread.Sleep(2000);
             return _counter[client];
